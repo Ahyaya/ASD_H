@@ -1,15 +1,18 @@
 # fftserver
 
-can be run on Linux or MacOS
+C/C++ based tool for computing amplitude spectral density (ASD) of non-uniform sampled signals
+
+can be run on Linux or MacOS, dependency: 
+`libgomp libomp fftw3 fftw3-devel`
 
 build .so files with
-make lib
+`make lib`
 
 build and test example signals with
-make test
+`make test`
 
 build a web callback binary
-make web
+`make web`
 
 clean the space with
-make clean or make cleanall
+`make clean` or `make cleanall`
