@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ASD Helper</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.68, maximum-scale=2.0, minimum-scale=0.5">
+<link rel="stylesheet" href="css/fftserver.css">
+</head>
+<body>
+<div class="commentArea" id="sizeContainer">
+<form id="myform" autocomplete="off">
+<fieldset class="formArea" id="sizeTrigger">
+<legend>Request to ASD Helper</legend><br />
+<br /><br />
+Signal data:
+<span class="helpSpan relativeSpan">
+	<img src="elements/info.svg" class="iconInfo" align="absmiddle">
+	<div class="helpTextUp">
+		<ul>
+			<li>上传待分析的采样数据X[n]，注意这里要求上传单列数据。</li>
+			<li>按时间均匀采样的数据请将采样间隔填入Sample interval。</li>
+			<li>上传的<span class="stress">文件格式为纯文本</span>，数据之间可以用回车、逗号、空格等方式隔开。</li>
+		</ul>
+	</div>
+</span>
+<span class="del">[<a href="javascript:void(0);" onclick="document.getElementById('xFile').value=''">del</a>]</span>
+<input type="file" id="xFile">
+<br /><br />
+Sample interval: <input type="text" id="udfDt" value="0.01"> (sec)
+<br /><br />
+<input type="checkbox" id="tFileCheckbox" onchange="tFileHook();">
+<label for="tFileCheckbox">User define CLKS:</label>
+<span class="helpSpan relativeSpan">
+	<img src="elements/info.svg" class="iconInfo" align="absmiddle">
+	<div class="helpTextUp">
+		<ul>
+			<li>勾选CLKS以定义采样数据的非均匀时间序列t[n]，单位为sec。</li>
+			<li>该选项适用于处理<span class="stress">非均匀采样的数据</span>，注意t[n]必须具有和X[n]相同长度。</li>
+			<li>上传的<span class="stress">文件格式为纯文本</span>，数据之间可以用回车、逗号、空格等方式隔开。</li>
+		</ul>
+	</div>
+</span>
+<span class="del">[<a href="javascript:void(0);" onclick="document.getElementById('tFile').value=''">del</a>]</span>
+<input type="file" id="tFile" disabled="1">
+<br /><br />
+<input type="checkbox" id="freqFileCheckbox" onchange="freqFileHook();">
+<label for="freqFileCheckbox">User define FREQ:</label>
+<span class="helpSpan relativeSpan">
+	<img src="elements/info.svg" class="iconInfo" align="absmiddle">
+	<div class="helpTextUp">
+		<ul>
+			<li>勾选FREQ以定义期望扫描分析的频率序列freq[n]，单位为Hz。</li>
+			<li>频率点需按照<span class="stress">从小到大排列</span>，允许非均匀间隔。</li>
+			<li>上传的<span class="stress">文件格式为纯文本</span>，数据之间可以用回车、逗号、空格等方式隔开。</li>
+		</ul>
+	</div>
+</span>
+<span class="del">[<a href="javascript:void(0);" onclick="document.getElementById('freqFile').value=''">del</a>]</span>
+<input type="file" id="freqFile" disabled="1">
+<br /><br />
+<div>
+	<input type="checkbox" id="TIMcheck" name="TIMcheck" style="display: none" onchange="toggleTIM();">
+	<label for="TIMcheck"><span id="TIM">&#9658</span> Window function</label>
+	<span class="helpSpan relativeSpan">
+		<img src="elements/info.svg" class="iconInfo" align="absmiddle">
+		<div class="helpTextDown">
+			<p class="question">为什么窗函数是神？</p>
+			<ul>
+				<li>首先是FFT能量泄漏问题：如果原始信号头尾数值不相等，直接FFT将会在低频引入能量泄漏。</li>
+				<li>为了<span class="stress">减少FFT带来的低频能量泄漏</span>，采用不同的加权函数对信号进行直接乘积，这个加权函数称为窗函数。</li>
+				<li>选错窗函数并不会覆盖真实信号，但合适的窗函数却可以有效压制能量泄漏，所以也有人一旦处理结果不合预期就立马调整窗函数，并最终得到理想的结果，成为众人口中的<span class="stress">窗函数战士</span>，<span class="bullshit">而这自然是神的应允。</span></li>
+				<li>FFT不加窗注定走不长远，而事实也是如此，一段具有周期性的信号在读数时恰好在非整数周期处截断，<span class="bullshit">违背了神的旨意，于是神降下了他的惩罚，</span>在0频率附近的等效脉冲如洪水般淹没了其他频段，信号特征被完全覆盖。</li>
+				<li>加窗是频谱分析的一种规范，<span class="bullshit">体现了神的意志，</span><span class="stress">加就完事了</span>。</li>
+			</ul>
+		</div>
+	</span>
+</div>
+<div id="secWinForm">
+	<span>alpha preference: <input type="text" id="alphaInput" value="10" onchange="setAlphaByText();" disabled="1"> </span>
+	<span class="del">[<a href="javascript:void(0);" onclick="winReset();">reset</a>]</span>
+	<div>
+		<input type="range" id="alpha" name="alpha" min="2" max="16" value="10" step="0.1" onchange="setAlphaByRange();" disabled="1">
+	</div>
+	<div><input type="radio" id="Hanning" name="winFunc" value="0" onchange="windowChange();" checked>
+		<label for="Hanning">Hanning</label>
+	</div>
+	<div><input type="radio" id="Hamming" name="winFunc" value="1" onchange="windowChange();">
+		<label for="Hamming">Hamming</label>
+	</div>
+	<div><input type="radio" id="FlatTop" name="winFunc" value="2" onchange="windowChange();">
+		<label for="FlatTop">Flat-Top</label>
+	</div>
+	<div><input type="radio" id="Blackman" name="winFunc" value="3" onchange="windowChange();">
+		<label for="Blackman">Blackman</label>
+	</div>
+	<div><input type="radio" id="Poisson" name="winFunc" value="4" onchange="windowChange();">
+		<label for="Poisson">Poisson</label>
+	</div>
+	<div><input type="radio" id="Kaiser" name="winFunc" value="5" onchange="windowChange();">
+		<label for="Kaiser">Kaiser</label>
+	</div>
+	<div><input type="radio" id="Gauss" name="winFunc" value="6" onchange="windowChange();">
+		<label for="Gauss">Gauss</label>
+	</div>
+	<div><input type="radio" id="Welch" name="winFunc" value="7" onchange="windowChange();">
+		<label for="Welch">Welch</label>
+	</div>
+	<div><input type="radio" id="Nuttall" name="winFunc" value="8" onchange="windowChange();">
+		<label for="Nuttall">Nuttall</label>
+	</div>
+	<div><input type="radio" id="Pcos" name="winFunc" value="9" onchange="windowChange();">
+		<label for="Pcos">expo-cosine</label>
+	</div>
+	<div><input type="radio" id="Planck" name="winFunc" value="10" onchange="windowChange();">
+		<label for="Planck">Planck-taper</label>
+	</div>
+	<div><input type="radio" id="Recta" name="winFunc" value="-1" onchange="windowChange();">
+		<label for="Recta">none</label>
+	</div>
+</div>
+<br />
+<span id="ResultSpan">Download: <a id="downloadLink"></a> -- <a id="filterData" target="_blank"></a></span>
+<br /><br />
+<span class="submitcover" id="sendButton"><span class="coversymbol">[</span><input type="button" value="Send" onclick="formSubmit()"><span class="coversymbol">]</span></span>
+<span class="submitcover" id="processingSpan">Processing...</span>
+<span class="submitcover" id="clearButton"><span class="coversymbol">[</span><input type="button" value="Clear" onclick="fileClear()"><span class="coversymbol">]</span></span>
+<div id="container"></div>
+</fieldset>
+<br />
+</form>
+</div>
+<footer>Guangdong ICP filing No. <a target="_blank" href="https://beian.miit.gov.cn/">2021023084</a></footer>
+<script src="js/fft.js"></script>
+<script src="js/d3.js"></script>
+<script src="js/resizeListener.js"></script>
+<script src="js/detailsFram.js"></script>
+</body>
+
+</html>

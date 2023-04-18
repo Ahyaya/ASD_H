@@ -1,0 +1,9 @@
+src/*.o
+lib/*.so
+lib/*.a
+contrib/*.o
+main/*.out
+main/*.exe
+main/*_flt.csv
+*.test
+*.DS_Store

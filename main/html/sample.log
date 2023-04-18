@@ -1,0 +1,38 @@
+Host: localhost:14160
+Connection: close
+Content-Length: 836
+User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: multipart/form-data; boundary=---------------------------13925749211457307006417167128
+Origin: http://172.16.208.39:1416
+Referer: http://172.16.208.39:1416/
+
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="xFile.name"
+
+xFile
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="xFile.path"
+
+/home/chan/C_code/fftserver/test/html/0000000011
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="tFile.name"
+
+tFile
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="tFile.path"
+
+/home/chan/C_code/fftserver/test/html/0000000012
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="freqFile.name"
+
+freqFile
+-----------------------------13925749211457307006417167128
+Content-Disposition: form-data; name="freqFile.path"
+
+/home/chan/C_code/fftserver/test/html/0000000010
+-----------------------------13925749211457307006417167128--
+9371--
+
