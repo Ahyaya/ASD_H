@@ -152,7 +152,7 @@ main/signalGen.out: main/signalGen.c
 	$(CC) main/signalGen.c -lm -o main/signalGen.out
 
 main/lib: $(DYNLIB_ASDH)
-	cd main && ln -s $(FINUFFT)/lib ./ && cd ../
+	cd main && ln -s $(FINUFFT)lib ./ && cd ../
 
 clean:
 	rm -f main/*.test
