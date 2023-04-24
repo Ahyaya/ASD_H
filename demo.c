@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "../include/ASD_H.h"
+#include "include/ASD_H.h"
 
 int main(void){
 
 //  Test if default option is working
     fprintf(stderr,"testing simple input\n");
-    ASD_H_auto("u2u_HANN.test", NULL, "exampleSignals/X_u2n.dat", NULL, NULL);
+    ASD_H_auto("main/u2u_HANN.test", NULL, "main/exampleSignals/X_u2n.dat", NULL, NULL);
 
 //  User define options
     fftOption_t opts;
@@ -16,16 +16,16 @@ int main(void){
 //  Test if smooth filter mode is working
     fprintf(stderr,"testing filter mode 1\n");
     opts.smoothMode=1;
-    ASD_H_auto("filter_HANN.test", NULL, "exampleSignals/X_u2n.dat", NULL, &opts);
+    ASD_H_auto("main/filter_HANN.test", NULL, "main/exampleSignals/X_u2n.dat", NULL, &opts);
 
     opts.winOption.winFuncName=KAISER;
-    ASD_H_auto("filter_KAISER.test", NULL, "exampleSignals/X_u2n.dat", NULL, &opts);
-    ASD_H_auto("filter_KAISER_n2u.test", NULL, "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
+    ASD_H_auto("main/filter_KAISER.test", NULL, "main/exampleSignals/X_u2n.dat", NULL, &opts);
+    ASD_H_auto("main/filter_KAISER_n2u.test", NULL, "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", &opts);
 
     fprintf(stderr,"testing filter mode 2\n");
     opts.smoothMode=2;
     opts.winOption.winFuncName=HANN;
-    ASD_H_auto("n2u_HANN.test", NULL, "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
+    ASD_H_auto("main/n2u_HANN.test", NULL, "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", &opts);
 
 //
 //  start to test N2UviaFile at several frequencies
@@ -36,7 +36,7 @@ int main(void){
     opts.winOption.winFuncName=KAISER;
     opts.winOption.alpha=10;
     opts.tolerance=1e-12;
-    ASD_H_auto("n2u_KAISER.test", NULL, "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
+    ASD_H_auto("main/n2u_KAISER.test", NULL, "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", &opts);
 
 //  change window function for further test BLACKMAN
 //    opts.winOption.winFuncName=BLACKMAN;
@@ -44,7 +44,7 @@ int main(void){
 
 //  change window function for further test HANN (default)
     opts.winOption.winFuncName=HANN;
-    ASD_H_auto("default.test", NULL, "exampleSignals/X.dat", "exampleSignals/t.dat", NULL);
+    ASD_H_auto("main/default.test", NULL, "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", NULL);
 
 //  change window function for further test NONE
 //    opts.winOption.winFuncName=NONE;
@@ -62,14 +62,14 @@ int main(void){
 
 //  default setting has been tested, but mind the sampling time dt=0.001 by default
     opts.winOption.winFuncName=HANN;
-    ASD_H_auto("u2n_HANN.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X_u2n.dat", NULL, &opts);
+    ASD_H_auto("main/u2n_HANN.test", "main/exampleSignals/freq_u2n.dat", "main/exampleSignals/X_u2n.dat", NULL, &opts);
 
 //    opts.winOption.winFuncName=NONE;
 //    ASD_H_auto("u2n_NONE.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X_u2n.dat", NULL, &opts);
 
     opts.winOption.winFuncName=KAISER;
     opts.debug=0;
-    ASD_H_auto("u2n_KAISER.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X_u2n.dat", NULL, &opts);
+    ASD_H_auto("main/u2n_KAISER.test", "main/exampleSignals/freq_u2n.dat", "main/exampleSignals/X_u2n.dat", NULL, &opts);
 
 //
 //  start to test N2NviaFile at several frequencies
@@ -79,13 +79,13 @@ int main(void){
     opts.winOption.alpha=10;
     opts.tolerance=1e-12;
     opts.debug=0;
-    ASD_H_auto("n2n_KAISER.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
+    ASD_H_auto("main/n2n_KAISER.test", "main/exampleSignals/freq_u2n.dat", "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", &opts);
 
 //    opts.winOption.winFuncName=BLACKMAN;
 //    ASD_H_auto("n2n_BLACKMAN.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
 
     opts.winOption.winFuncName=HANN;
-    ASD_H_auto("n2n_HANN.test", "exampleSignals/freq_u2n.dat", "exampleSignals/X.dat", "exampleSignals/t.dat", &opts);
+    ASD_H_auto("main/n2n_HANN.test", "main/exampleSignals/freq_u2n.dat", "main/exampleSignals/X.dat", "main/exampleSignals/t.dat", &opts);
 
 //    opts.winOption.winFuncName=NONE;
 //    opts.debug=1;

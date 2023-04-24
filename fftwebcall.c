@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "../include/ASD_H.h"
+#include "include/ASD_H.h"
 
 #define MAXRECVLEN 4096
 

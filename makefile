@@ -136,13 +136,13 @@ $(DYNLIB_ASDH): $(DYNLIB) src/ASD_H.c
 # see: http://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html
 # Also note -l libs come after objects, as per modern GCC requirement.
 
-test: main/demo.out main/exampleSignals/X.dat main/lib
+test: demo.out main/exampleSignals/X.dat
 	@echo "test start"
-	cd main && ./demo.out && cd ../
+	./demo.out
 	@echo "test complete"
 
-main/demo.out: $(DYNLIB) $(DYNLIB_ASDH) main/demo.c
-	$(CC) main/demo.c $(ABSDYNLIB) $(ABSDYNLIB_ASDH) -lm -o main/demo.out
+demo.out: $(DYNLIB) $(DYNLIB_ASDH) demo.c
+	$(CC) demo.c $(ABSDYNLIB) $(ABSDYNLIB_ASDH) -lm -o demo.out
 
 main/exampleSignals/X.dat: main/signalGen.out
 	@echo "Generating example signal"
@@ -150,9 +150,6 @@ main/exampleSignals/X.dat: main/signalGen.out
 
 main/signalGen.out: main/signalGen.c
 	$(CC) main/signalGen.c -lm -o main/signalGen.out
-
-main/lib: $(DYNLIB_ASDH)
-	cd main && ln -s $(FINUFFT)lib ./ && cd ../
 
 clean:
 	rm -f main/*.test
@@ -163,7 +160,8 @@ objclean:
 	rm -f contrib/*.o
 
 cleanall: clean objclean
+	rm -f *.out
 	rm -f main/*.out
 
-web: $(DYNLIB) $(DYNLIB_ASDH) main/main.c main/lib
-	$(CC) main/main.c $(ABSDYNLIB) $(ABSDYNLIB_ASDH) -lpthread -o main/fftwebcall.out
+web: $(DYNLIB) $(DYNLIB_ASDH) fftwebcall.c
+	$(CC) fftwebcall.c $(ABSDYNLIB) $(ABSDYNLIB_ASDH) -lpthread -o fftwebcall.out
